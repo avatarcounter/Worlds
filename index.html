@@ -3,30 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goodbye to a World</title>
+    <title>Worlds Embed</title>
     <style>
-        /* This removes all scrollbars and gaps */
-        body, html { 
-            margin: 0; 
-            padding: 0; 
-            height: 100%; 
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
             width: 100%;
-            overflow: hidden; 
-            background-color: #000; 
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: sans-serif;
         }
-        /* This makes the video fill the entire screen */
-        iframe { 
-            width: 100%; 
-            height: 100%; 
-            border: none; 
+
+        #trigger-btn {
+            font-size: 5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: transform 0.2s;
+        }
+
+        #trigger-btn:hover {
+            transform: scale(1.1);
+        }
+
+        #earth-cycle {
+            display: none;
+            font-size: 10rem;
+            transition: transform 1.5s ease-in;
+        }
+
+        #video-container {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shrink {
+            transform: scale(0);
         }
     </style>
 </head>
 <body>
-    <iframe 
-        src="https://youtube.com" 
-        allow="autoplay; encrypted-media" 
-        allowfullscreen>
-    </iframe>
+
+    <!-- Initial Button -->
+    <button id="trigger-btn">👋</button>
+
+    <!-- Animated Earths -->
+    <div id="earth-cycle">🌏</div>
+
+    <!-- Video Embed -->
+    <div id="video-container">
+        <video id="myVideo" playsinline loop>
+            <source src="worlds.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script>
+        const btn = document.getElementById('trigger-btn');
+        const earth = document.getElementById('earth-cycle');
+        const videoCont = document.getElementById('video-container');
+        const video = document.getElementById('myVideo');
+        
+        const earths = ["🌏", "🌍", "🌎"];
+        let count = 0;
+
+        btn.addEventListener('click', () => {
+            // Hide the hand, show the earth
+            btn.style.display = 'none';
+            earth.style.display = 'block';
+
+            // Start cycling the emojis
+            const cycleInterval = setInterval(() => {
+                earth.innerText = earths[count % 3];
+                count++;
+            }, 150);
+
+            // Start the shrink animation
+            setTimeout(() => {
+                earth.classList.add('shrink');
+            }, 100);
+
+            // After shrinking finishes (1.5s), show video
+            setTimeout(() => {
+                clearInterval(cycleInterval);
+                earth.style.display = 'none';
+                videoCont.style.display = 'block';
+                video.play();
+            }, 1600);
+        });
+    </script>
 </body>
 </html>
